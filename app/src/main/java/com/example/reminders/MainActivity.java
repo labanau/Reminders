@@ -8,6 +8,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -61,8 +62,21 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+
+        //noinspection SimplifiableIfStatement
+        switch (id) {
+            case R.id.action_settings:
+                Log.d(getLocalClassName(), "Settings");
+                return true;
+            case R.id.action_new:
+                Log.d(getLocalClassName(), "New Reminder");
+                return true;
+            case R.id.action_exit:
+                Log.d(getLocalClassName(), "Exit");
+                finish();
+                return true;
+                default:
+                    return false;
         }
 
         return super.onOptionsItemSelected(item);
