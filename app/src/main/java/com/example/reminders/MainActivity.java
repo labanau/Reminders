@@ -76,9 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 return true;
                 default:
-                    return false;
+                    return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 }
