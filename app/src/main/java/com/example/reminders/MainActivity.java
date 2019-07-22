@@ -12,6 +12,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 
 import android.util.Log;
 import android.view.ActionMode;
@@ -19,10 +20,16 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private RemindersDbAdapter mDbAdapter;
     private RemindersSimpleCursorAdapter mCursorAdapter;
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    //@TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,6 +154,50 @@ public class MainActivity extends AppCompatActivity {
         mDbAdapter.createReminder("Create Planner app", true);
         mDbAdapter.createReminder("Dummy data", false);
         mDbAdapter.createReminder("Dummy data", true);
+    }
+
+    private void fireCustomDialog(final Reminder reminder) {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_custom);
+
+        TextView titleView = dialog.findViewById(R.id.custom_title);
+        final EditText editCustom = dialog.findViewById(R.id.custom_edit_reminder);
+        Button commitButton = dialog.findViewById(R.id.custom_button_commit);
+        final CheckBox checkBox = dialog.findViewById(R.id.custom_check_box);
+        LinearLayout rootLayout = dialog.findViewById(R.id.custom_root_layout);
+        final boolean isEditOperation = (reminder != null);
+
+        if (isEditOperation) {
+            titleView.setText("Edit reminder");
+            checkBox.setChecked(reminder.getImportant() == 1);
+            editCustom.setText(reminder.getContent());
+            rootLayout.setBackgroundColor(getResources().getColor(R.color.blue));
+        }
+
+        commitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String reminderText = editCustom.getText().toString();
+                if(isEditOperation) {
+                    Reminder reminderEdited = new Reminder(reminder.getId(),
+                            reminderText, checkBox.isChecked() ? 1 : 0);
+                    mDbAdapter.updateReminder(reminderEdited);
+                } else {
+                    mDbAdapter.createReminder(reminderText, checkBox.isChecked());
+                }
+                mCursorAdapter.changeCursor(mDbAdapter.fetchAllReminders());
+                dialog.dismiss();
+            }
+        });
+        Button buttonCancel = dialog.findViewById(R.id.custom_button_channel);
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     @Override
