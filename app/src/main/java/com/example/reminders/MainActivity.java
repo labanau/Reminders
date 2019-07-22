@@ -13,13 +13,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity {
 
     private ListView mListView;
-    private RemindersDpAdapter mDbAdapter;
+    private RemindersDbAdapter mDbAdapter;
     private RemindersSimpleCursorAdapter mCursorAdapter;
 
     @Override
@@ -32,26 +31,11 @@ public class MainActivity extends AppCompatActivity {
         mListView = findViewById(R.id.reminders_list_view);
         mListView.setDivider(null);
 
-        mDbAdapter = new RemindersDpAdapter(this);
+        mDbAdapter = new RemindersDbAdapter(this);
         mDbAdapter.open();
-
-        if(savedInstanceState == null) {
-            mDbAdapter.deleteAllReminders();
-
-            // add data
-            insertSomeReminders();
-        }
-
         Cursor cursor = mDbAdapter.fetchAllReminders();
-
-        String[] from = new String[] {
-                RemindersDpAdapter.COL_CONTENT
-        };
-
-        int[] to = new int[]{
-                R.id.row_text
-        };
-
+        String[] from = new String[]{ RemindersDbAdapter.COL_CONTENT   };
+        int[] to = new int[]{ R.id.row_text };
         mCursorAdapter = new RemindersSimpleCursorAdapter(
                 MainActivity.this,
                 R.layout.reminders_row,
@@ -59,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
                 from,
                 to,
                 0);
-
         mListView.setAdapter(mCursorAdapter);
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -110,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 return true;
                 default:
-                    return super.onOptionsItemSelected(item);
+                    return false;
         }
     }
 }

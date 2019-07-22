@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class RemindersDpAdapter {
+public class RemindersDbAdapter {
 
     public static final String COL_ID = "_id";
     public static final String COL_CONTENT = "content";
@@ -24,20 +24,20 @@ public class RemindersDpAdapter {
     private SQLiteDatabase mDb;
 
     private static final String DATABASE_NAME = "dba_remdrs";
-    public static final String TABLE_NAME = "tbl_remdrs";
-    public static final int DATABASE_VERSION = 1;
+    private static final String TABLE_NAME = "tbl_remdrs";
+    private static final int DATABASE_VERSION = 1;
 
     private final Context mCtx;
-
-    public RemindersDpAdapter (Context context) {
-        this.mCtx = context;
-    }
 
     private static final String DATABASE_CREATE =
             "CREATE TABLE if not exists " + TABLE_NAME + " ( " +
                     COL_ID + " INTEGER PRIMARY KEY autoincrement, " +
                     COL_CONTENT + " TEXT, " +
                     COL_IMPORTANT + " INTEGER );";
+
+    public RemindersDbAdapter(Context context) {
+        this.mCtx = context;
+    }
 
 
     public void open() throws SQLException {
@@ -68,12 +68,11 @@ public class RemindersDpAdapter {
 
     public Reminder fetchreminderById(int id) {
         Cursor cursor = mDb.query(TABLE_NAME, new String[]{COL_ID, COL_CONTENT, COL_IMPORTANT}, COL_ID
-        + "=?", new String[]{String.valueOf(id)}, null, null, null
+        + "=?", new String[]{String.valueOf(id)}, null, null, null, null
         );
         if (cursor != null) {
             cursor.moveToFirst();
         }
-
         return new Reminder(
                 cursor.getInt(INDEX_ID),
                 cursor.getString(INDEX_CONTENT),

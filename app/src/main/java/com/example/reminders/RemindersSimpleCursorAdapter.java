@@ -6,11 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SimpleCursorAdapter;
 
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.reminders.R;
-import com.example.reminders.RemindersDpAdapter;
-
 public class RemindersSimpleCursorAdapter extends SimpleCursorAdapter {
     //###########################################
     //  CONSTRUCTOR
@@ -35,9 +30,9 @@ public class RemindersSimpleCursorAdapter extends SimpleCursorAdapter {
 
         ViewHolder holder = (ViewHolder) view.getTag();
 
-        if ( holder != null) {
+        if ( holder == null) {
             holder = new ViewHolder();
-            holder.colImp = cursor.getColumnIndexOrThrow(RemindersDpAdapter.COL_IMPORTANT);
+            holder.colImp = cursor.getColumnIndexOrThrow(RemindersDbAdapter.COL_IMPORTANT);
             holder.listTab = view.findViewById(R.id.row_tab);
             view.setTag(holder);
         }
