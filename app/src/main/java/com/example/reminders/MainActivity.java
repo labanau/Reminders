@@ -1,5 +1,6 @@
 package com.example.reminders;
 
+import android.database.Cursor;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -18,6 +19,8 @@ import android.widget.ListView;
 public class MainActivity extends AppCompatActivity {
 
     private ListView mListView;
+    private RemindersDpAdapter mDbAdapter;
+    private RemindersSimpleCursorAdapter mCursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,15 +30,30 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mListView = findViewById(R.id.reminders_list_view);
+        mListView.setDivider(null);
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this,
+        mDbAdapter = new RemindersDpAdapter(this);
+        mDbAdapter.open();
+
+        Cursor cursor = mDbAdapter.fetchAllReminders();
+
+        String[] from = new String[] {
+                RemindersDpAdapter.COL_CONTENT
+        };
+
+        int[] to = new int[]{
+                R.id.row_text
+        };
+
+        mCursorAdapter = new RemindersSimpleCursorAdapter(
+                MainActivity.this,
                 R.layout.reminders_row,
-                R.id.row_text,
-                new String[]{"1 record","2 record","3 record"}
-        );
+                cursor,
+                from,
+                to,
+                0);
 
-        mListView.setAdapter(arrayAdapter);
+        mListView.setAdapter(mCursorAdapter);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
