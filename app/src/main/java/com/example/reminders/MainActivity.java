@@ -35,6 +35,13 @@ public class MainActivity extends AppCompatActivity {
         mDbAdapter = new RemindersDpAdapter(this);
         mDbAdapter.open();
 
+        if(savedInstanceState == null) {
+            mDbAdapter.deleteAllReminders();
+
+            // add data
+            insertSomeReminders();
+        }
+
         Cursor cursor = mDbAdapter.fetchAllReminders();
 
         String[] from = new String[] {
@@ -63,6 +70,15 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    private void insertSomeReminders() {
+        mDbAdapter.createReminder("Buy learn Android studio", true);
+        mDbAdapter.createReminder("Buy Bike", false);
+        mDbAdapter.createReminder("Sell Bike", true);
+        mDbAdapter.createReminder("Create Planner app", true);
+        mDbAdapter.createReminder("Dummy data", false);
+        mDbAdapter.createReminder("Dummy data", true);
     }
 
     @Override
