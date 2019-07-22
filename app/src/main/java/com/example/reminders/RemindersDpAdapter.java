@@ -35,7 +35,7 @@ public class RemindersDpAdapter {
 
     private static final String DATABASE_CREATE =
             "CREATE TABLE if not exists " + TABLE_NAME + " ( " +
-                    COL_ID + "INTEGER PRIMARY KEY autoincrement, " +
+                    COL_ID + " INTEGER PRIMARY KEY autoincrement, " +
                     COL_CONTENT + " TEXT, " +
                     COL_IMPORTANT + " INTEGER );";
 
