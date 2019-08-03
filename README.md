@@ -8,11 +8,11 @@ This app is from Learn Android Studio Book Lab 1.
 
 ### Installing
 
-
+.
 
 ## Running the tests
 
-
+.
 
 ### Break down into end to end tests
 
